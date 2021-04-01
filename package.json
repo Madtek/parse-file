@@ -1,6 +1,6 @@
 {
   "name": "@madtek/parse-file",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "npx script to parse a file (testing)",
   "main": "index.js",
   "scripts": {
