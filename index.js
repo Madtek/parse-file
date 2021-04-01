@@ -99,39 +99,35 @@ function parseXml() {
         let idx = 0;
         let ns = "";
         let entries = [];
+
+        let key = 0;
+        let aspect = "";
+        let lang = "";
+        let str = "";
         rl.on("line", (input) => {
             line = input.toString();
 
-            if(line.indexOf("<") >= 0) {
-                return;
+            if(line.indexOf("<code") >= 0) {
+                idx = line.indexOf("key=") + 5;
+                // idx = line.indexOf("constant=") + 10;
+                key = line.slice(idx, line.indexOf("\"", idx));
             }
 
-            //ist eine .htm zeile
-            idx = line.indexOf(".htm");
-            if(idx > 0) {
-                if(ignnoreNs) {
-                    ns = defaultNs;
-                }
-                else {
-                    ns = line.slice(0, idx);
-                }
-
-                if(!result.de[ns]) {
-                    result.de[ns] = {};
-                    result.en[ns] = {};
-                    result.fr[ns] = {};
-                    result.it[ns] = {};
-                }
-
-                //have enough entries for all
-                entries = line.split("\t");
-                if(entries.length >= 6) {
-                    result.de[ns][entries[1]] = entries[4];
-                    result.en[ns][entries[1]] = entries[4];
-                    result.fr[ns][entries[1]] = entries[5];
-                    result.it[ns][entries[1]] = entries[6];
-                }
+            if(line.indexOf("<aspect") >= 0) {
+                idx = line.indexOf("name=") + 6;
+                aspect = line.slice(idx, line.indexOf("\"", idx));
             }
+
+            if(line.indexOf("<text") >= 0) {
+                idx = line.indexOf("language=") + 10;
+                lang = line.slice(idx, line.indexOf("\"", idx));
+
+                idx = line.indexOf(">", idx) + 1;
+                str = line.slice(idx, line.indexOf("</", idx));
+
+                result[lang][defaultNs][key] = str;
+            }
+
         });
 
         rl.on("close", () => {
@@ -148,13 +144,10 @@ function parseXml() {
     });
 }
 
-    
+
 if(process.argv[2].indexOf("nls") >= 0) {
     parseNls();
 }
 else if (process.argv[2].indexOf("xml") >= 0) {
     parseXml();
-}
-else {
-    console.log("example Usage: npx @madtek/parse-file ./url --ignore-ns")
 }
