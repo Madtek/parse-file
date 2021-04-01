@@ -130,6 +130,8 @@ function parseXml() {
                 idx = line.indexOf(">", idx) + 1;
                 str = line.slice(idx, line.indexOf("</", idx));
 
+
+                console.log("add", lang, defaultNs, key, str);
                 result[lang][defaultNs][key] = str;
             }
 

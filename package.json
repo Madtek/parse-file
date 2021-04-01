@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "pub-patch": "npm version patch && npm publish",
+    "pub-patch": "git commit -a -m \"patch commit\" && npm version patch && npm publish",
     "pub-minor": "npm version minor && npm publish"
   },
   "bin": {
