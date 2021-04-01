@@ -1,0 +1,26 @@
+{
+  "name": "@madtek/parse-file",
+  "version": "1.0.0",
+  "description": "npx script to parse a file (testing)",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madtek/parse-file.git"
+  },
+  "keywords": [
+    "npx",
+    "parse",
+    "file",
+    "test",
+    "experimental"
+  ],
+  "author": "Gregor Sklorz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/madtek/parse-file/issues"
+  },
+  "homepage": "https://github.com/madtek/parse-file#readme"
+}
