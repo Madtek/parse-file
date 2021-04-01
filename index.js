@@ -134,7 +134,7 @@ function parseXml() {
                 str = line.slice(idx, line.indexOf("</", idx));
 
 
-                console.log("-add", lang, defaultNs, key, str);
+                // console.log("-add", lang, defaultNs, key, str);
                 result[lang][defaultNs][key] = str;
             }
 
