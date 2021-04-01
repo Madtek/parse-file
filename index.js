@@ -94,6 +94,14 @@ function parseXml() {
             console: false
         });
 
+        result.de = {};
+        result.de[defaultNs] = {};
+        result.en = {};
+        result.en[defaultNs] = {};
+        result.fr = {};
+        result.fr[defaultNs] = {};
+        result.it = {};
+        result.it[defaultNs] = {};
 
         let line = "";
         let idx = 0;
@@ -121,12 +129,6 @@ function parseXml() {
             if(line.indexOf("<text") >= 0) {
                 idx = line.indexOf("language=") + 10;
                 lang = line.slice(idx, line.indexOf("\"", idx));
-
-                if(!result[lang]) {
-                    result[lang] = {};
-                    result[lang][defaultNs] = {};
-                    console.log(result[lang], result[lang][defaultNs]);
-                }
 
                 idx = line.indexOf(">", idx) + 1;
                 str = line.slice(idx, line.indexOf("</", idx));
