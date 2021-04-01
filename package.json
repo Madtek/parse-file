@@ -4,7 +4,9 @@
   "description": "npx script to parse a file (testing)",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "patch": "npm version patch && npm publish",
+    "publish": "npm version minor && npm publish"
   },
   "bin": {
     "parse-file": "index.js"
