@@ -122,6 +122,11 @@ function parseXml() {
                 idx = line.indexOf("language=") + 10;
                 lang = line.slice(idx, line.indexOf("\"", idx));
 
+                if(!result[lang]) {
+                    result[lang] = {};
+                    result[lang][defaultNs] = {};
+                }
+
                 idx = line.indexOf(">", idx) + 1;
                 str = line.slice(idx, line.indexOf("</", idx));
 
