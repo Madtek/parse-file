@@ -125,6 +125,7 @@ function parseXml() {
                 if(!result[lang]) {
                     result[lang] = {};
                     result[lang][defaultNs] = {};
+                    console.log(result[lang], result[lang][defaultNs]);
                 }
 
                 idx = line.indexOf(">", idx) + 1;
