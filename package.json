@@ -6,6 +6,9 @@
   "scripts": {
     "test": "test"
   },
+  "bin": {
+    "parse-file": "index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/madtek/parse-file.git"
