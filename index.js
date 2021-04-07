@@ -86,7 +86,7 @@ function parseNls() {
             //ist eine .htm zeile
             idx = line.indexOf(".htm");
             if(idx > 0) {
-                if (ignnoreNs) {
+                if (useDefaultNs) {
                     ns = defaultNs;
                 } else {
                     ns = line.slice(0, idx);
