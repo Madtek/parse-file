@@ -38,21 +38,21 @@ function writeResults(rl) {
             if(er) {
                 throw er;
             }
-            console.log("SAVE DONE: " + fileName + ".de.json");
+            console.log("SAVE DONE: " + fileName + ".en.json");
         });
 
         fs.writeFile(fileName + ".fr.json", JSON.stringify(result.fr), (er) => {
             if(er) {
                 throw er;
             }
-            console.log("SAVE DONE: " + fileName + ".de.json");
+            console.log("SAVE DONE: " + fileName + ".fr.json");
         });
 
         fs.writeFile(fileName + ".it.json", JSON.stringify(result.it), (er) => {
             if(er) {
                 throw er;
             }
-            console.log("SAVE DONE: " + fileName + ".de.json");
+            console.log("SAVE DONE: " + fileName + ".it.json");
         });
     })
 
