@@ -8,11 +8,55 @@ let readline = require("readline");
 let result = {de:{}, en:{}, fr:{}, it:{}};
 
 const defaultNs = "translation";
-let ignnoreNs = false;
+let useDefaultNs = false;
 if (process.argv.indexOf("--ignore-ns") >= 0) {
-    ignnoreNs = true;
+    useDefaultNs = true;
 }
 
+let noNs = false;
+if (process.argv.indexOf("--no-ns") >= 0) {
+    noNs = true;
+}
+
+//FileName
+let startIdx = process.argv[2].lastIndexOf("/");
+startIdx = startIdx < 0 ? 0 : startIdx + 1;
+const fileName = process.argv[2].slice(startIdx, process.argv[2].lastIndexOf("."));
+
+function writeResults(rl) {
+    rl.on("close", () => {
+        // console.log("parse result", result);
+
+        fs.writeFile(fileName + ".de.json", JSON.stringify(result.de), (er) => {
+            if(er) {
+                throw er;
+            }
+            console.log("SAVE DONE: " + fileName + ".de.json");
+        });
+
+        fs.writeFile(fileName + ".en.json", JSON.stringify(result.en), (er) => {
+            if(er) {
+                throw er;
+            }
+            console.log("SAVE DONE: " + fileName + ".de.json");
+        });
+
+        fs.writeFile(fileName + ".fr.json", JSON.stringify(result.fr), (er) => {
+            if(er) {
+                throw er;
+            }
+            console.log("SAVE DONE: " + fileName + ".de.json");
+        });
+
+        fs.writeFile(fileName + ".it.json", JSON.stringify(result.it), (er) => {
+            if(er) {
+                throw er;
+            }
+            console.log("SAVE DONE: " + fileName + ".de.json");
+        });
+    })
+
+}
 
 function parseNls() {
     fs.readFile( process.argv[2], (err, data) => {
@@ -42,41 +86,43 @@ function parseNls() {
             //ist eine .htm zeile
             idx = line.indexOf(".htm");
             if(idx > 0) {
-                if(ignnoreNs) {
+                if (ignnoreNs) {
                     ns = defaultNs;
-                }
-                else {
+                } else {
                     ns = line.slice(0, idx);
                 }
 
-                if(!result.de[ns]) {
-                    result.de[ns] = {};
-                    result.en[ns] = {};
-                    result.fr[ns] = {};
-                    result.it[ns] = {};
+                if (noNs) {
+                    //have enough entries for all
+                    entries = line.split("\t");
+                    if (entries.length >= 6) {
+                        result.de[entries[1]] = entries[4];
+                        result.en[entries[1]] = entries[4];
+                        result.fr[entries[1]] = entries[5];
+                        result.it[entries[1]] = entries[6];
+                    }
+                } else {
+                    if (!result.de[ns]) {
+                        result.de[ns] = {};
+                        result.en[ns] = {};
+                        result.fr[ns] = {};
+                        result.it[ns] = {};
+                    }
+
+                    //have enough entries for all
+                    entries = line.split("\t");
+                    if (entries.length >= 6) {
+                        result.de[ns][entries[1]] = entries[4];
+                        result.en[ns][entries[1]] = entries[4];
+                        result.fr[ns][entries[1]] = entries[5];
+                        result.it[ns][entries[1]] = entries[6];
+                    }
                 }
 
-                //have enough entries for all
-                entries = line.split("\t");
-                if(entries.length >= 6) {
-                    result.de[ns][entries[1]] = entries[4];
-                    result.en[ns][entries[1]] = entries[4];
-                    result.fr[ns][entries[1]] = entries[5];
-                    result.it[ns][entries[1]] = entries[6];
-                }
             }
         });
 
-        rl.on("close", () => {
-            // console.log("parse result", result);
-
-            fs.writeFile("result.json", JSON.stringify(result), (er) => {
-                if(er) {
-                    throw er;
-                }
-                console.log("SAVE result file DONE.");
-            });
-        })
+        writeResults(rl);
 
     });
 }
@@ -94,14 +140,6 @@ function parseXml() {
             console: false
         });
 
-        result.de = {};
-        result.de[defaultNs] = {};
-        result.en = {};
-        result.en[defaultNs] = {};
-        result.fr = {};
-        result.fr[defaultNs] = {};
-        result.it = {};
-        result.it[defaultNs] = {};
 
         let line = "";
         let idx = 0;
@@ -130,26 +168,27 @@ function parseXml() {
                 idx = line.indexOf("language=") + 10;
                 lang = line.slice(idx, line.indexOf("\"", idx));
 
+                if(!result[lang]) {
+                    result[lang] = {};
+                    if(noNs) {
+                        result[lang][defaultNs] = {};
+                    }
+                }
+
                 idx = line.indexOf(">", idx) + 1;
                 str = line.slice(idx, line.indexOf("</", idx));
 
-
-                // console.log("-add", lang, defaultNs, key, str);
-                result[lang][defaultNs][key] = str;
+                if(noNs) {
+                    result[lang][key] = str;
+                }
+                else {
+                    result[lang][defaultNs][key] = str;
+                }
             }
 
         });
 
-        rl.on("close", () => {
-            // console.log("parse result", result);
-
-            fs.writeFile("result.json", JSON.stringify(result), (er) => {
-                if(er) {
-                    throw er;
-                }
-                console.log("SAVE result file DONE.");
-            });
-        })
+        writeResults(rl);
 
     });
 }
